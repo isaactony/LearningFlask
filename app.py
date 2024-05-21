@@ -6,6 +6,13 @@ from db import stores, items
 
 app = Flask(__name__)
 
+@app.get("/store/<string:name>")
+def get_store(name):
+    for store in stores:
+        if store["name"] == name:
+            return store
+    return {"message": "Store not found"}, 404
+
 
 @app.get("/item/<string:item_id>")
 def get_item(item_id):
@@ -14,14 +21,7 @@ def get_item(item_id):
     except KeyError:
         return {"message": "Item not found"}, 404
 
-@app.get("/store/<string:name>")
-def get_store(name):
-    try:
-        # Here you might also want to add the items in this store
-        # We'll do that later on in the course
-        return stores[store_id]
-    except KeyError:
-        return {"message": "Store not found"}, 404
+
 @app.post("/item")
 def create_item():
     item_data = request.get_json()
