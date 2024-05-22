@@ -2,16 +2,11 @@ import uuid
 from flask import Flask, request
 
 from db import stores, items
-
+from flask_smorest import abort
+ß
 
 app = Flask(__name__)
 
-@app.get("/store/<string:name>")
-def get_store(name):
-    for store in stores:
-        if store["name"] == name:
-            return store
-    return {"message": "Store not found"}, 404
 
 
 @app.get("/item/<string:item_id>")
@@ -20,6 +15,7 @@ def get_item(item_id):
         return items[item_id]
     except KeyError:
         return {"message": "Item not found"}, 404
+
 
 
 @app.post("/item")
@@ -43,11 +39,11 @@ def get_all_items():
 @app.get("/store/<string:store_id>")
 def get_store(store_id):
     try:
+        # Here you might also want to add the items in this store
+        # We'll do that later on in the course
         return stores[store_id]
     except KeyError:
-        return {"message": "Store not found"}, 404
-
-
+        abort(404, message="Store not found.")
 @app.post("/store")
 def create_store():
     store_data = request.get_json()
