@@ -60,6 +60,15 @@ def get_store(store_id):
     except KeyError:
         abort(404, message="Store not found.")
 
+ß
+@app.delete("/item/<string:item_id>")
+def delete_item(item_id):
+    try:
+        del items[item_id]
+        return {"message": "Item deleted."}
+    except KeyError:
+        abort(404, message="Item not found.")
+
 @app.post("/store")
 def create_store():
     store_data = request.get_json()
